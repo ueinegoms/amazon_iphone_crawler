@@ -9,4 +9,7 @@ import scrapy
 class AmazonIphoneCrawlerItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    product_name = scrapy.Field()
+    product_price_whole = scrapy.Field()
+    product_price_fraction = scrapy.Field()
     pass
