@@ -9,14 +9,19 @@ class AmazonIphoneSpiderSpider(scrapy.Spider):
     def parse(self, response):
         items = AmazonIphoneCrawlerItem()
 
-        product_name = response.css('.a-color-base.a-text-normal').css('::text').extract()
-        product_price_whole = response.css('.a-price-whole').css('::text').extract()
-        product_price_fraction = response.css('.a-text-price').css('::text').extract()
+        all_products = response.css('.s-asin .sg-col-inner')
 
-        items['product_name'] = product_name
-        items['product_price_whole'] = product_price_whole
-        items['product_price_fraction'] = product_price_fraction
+        for product in all_products:
+            product_name = "".join(product.css('.a-color-base.a-text-normal').css('::text').extract())
+            product_price_whole = product.css('.a-price-whole').css('::text').extract()
+            product_price_fraction = product.css('.a-price-fraction').css('::text').extract()
+            product_price_combined = "".join(product_price_whole + product_price_fraction)
+            # product_price_combined = product_price_whole
 
-        yield items
+            items['product_name'] = product_name
+            items['product_price_whole'] = product_price_combined
+            # items['product_price_fraction'] = product_price_fraction
+
+            yield items
 
         # pass
